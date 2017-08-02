@@ -11,7 +11,7 @@ if [ ! -x ${GCLOUD} ]; then
     rm google-cloud-sdk-159.0.0-linux-x86_64.tar.gz
 fi
 
-#${GCLOUD} --quiet components update
+${GCLOUD} --quiet components update
 ${GCLOUD} auth activate-service-account --key-file .gcloud-key
 
 export MODULE_NAME=$1
