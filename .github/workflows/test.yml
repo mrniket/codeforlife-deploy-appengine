@@ -41,6 +41,9 @@ jobs:
         run: |
           sudo apt-get install libmysqlclient-dev
           pip install mysql-python
+      
+      - name: 'Install kubernetes'
+        run: pip install kubernetes
         
       - name: 'Install packages'
         run: |
