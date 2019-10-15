@@ -5,6 +5,10 @@ on: [deployment]
 jobs:
   deployment:
     runs-on: ubuntu-latest
+    env:
+      APP_ID: decent-digit-629
+      NODE_ENV: production
+      DB_PORT: 3306
     steps:
       - name: 'Checkout'
         uses: 'actions/checkout@v1'
@@ -52,6 +56,19 @@ jobs:
         run: |
           sudo sed -i '/\[mysqld\]/assl = 1' /etc/mysql/mysql.conf.d/mysqld.cnf
           sudo service mysql restart
+          
+      - name: 'Authenticate with Google Cloud'
+        uses: actions/gcloud/cli@master
+        with:
+          args: config set project ${{ APP_ID }}
+          
+      - name: 'Authenticate with Google Cloud'
+        uses: actions/gcloud/cli@master
+        with:
+          args: container clusters get-credentials ${{ github.event.deployment.environment }} --zone europe-west1-b
+      
+      - name: 'Deploy k8s'
+        run: python clusters_deploy/deploy.py ${{ github.event.deployment.environment }}
 
       - name: 'Deployment success'
         if: success()
