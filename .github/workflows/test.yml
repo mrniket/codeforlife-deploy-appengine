@@ -60,7 +60,7 @@ jobs:
       - name: 'Authenticate with Google Cloud'
         uses: actions/gcloud/cli@master
         with:
-          args: config set project ${{ APP_ID }}
+          args: config set project ${{ jobs.deployment.env.APP_ID }}
           
       - name: 'Authenticate with Google Cloud'
         uses: actions/gcloud/cli@master
