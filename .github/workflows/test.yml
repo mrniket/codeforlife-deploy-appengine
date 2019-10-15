@@ -57,18 +57,18 @@ jobs:
           sudo sed -i '/\[mysqld\]/assl = 1' /etc/mysql/mysql.conf.d/mysqld.cnf
           sudo service mysql restart
           
-      - name: 'Authenticate with Google Cloud'
+      - name: 'gcloud: set project id'
         uses: actions/gcloud/cli@master
         with:
           args: config set project ${APP_ID}
           
-      - name: 'Authenticate with Google Cloud'
+      - name: 'Get cluster credentials'
         uses: actions/gcloud/cli@master
         with:
           args: container clusters get-credentials ${{ github.event.deployment.environment }} --zone europe-west1-b
       
       - name: 'Deploy k8s'
-        run: python clusters_deploy/deploy.py ${{ github.event.deployment.environment }}
+        run: python clusters_setup/deploy.py ${{ github.event.deployment.environment }}
 
       - name: 'Deployment success'
         if: success()
