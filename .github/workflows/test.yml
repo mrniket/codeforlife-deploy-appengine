@@ -29,6 +29,7 @@ jobs:
         
       - name: 'Install packages'
         run: |
+          pip install mysql-python
           pip install -t lib codeforlife-portal
           pip install -t lib --pre --upgrade --no-deps aimmo
           rm -rf lib/pytz lib/pytz*.dist-info
