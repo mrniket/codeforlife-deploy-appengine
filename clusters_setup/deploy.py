@@ -131,7 +131,6 @@ def main(module_name):
     :param aimmo_version: The tagged version of AI:MMO. We will use this to
                           build the correct docker images.
     """
-    kubernetes.config.load_kube_config("/home/runner/.kube/config")
 
     global api_instance
     global extensions_api_instance
