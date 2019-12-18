@@ -1,7 +1,7 @@
 import os
 import sys
 
-import kubernetes
+from kubernetes import config, client
 import yaml
 
 # Root directory of the project.
@@ -97,13 +97,13 @@ def restart_pods(game_creator_yaml, ingress_yaml):
     """
     for rc in api_instance.list_namespaced_replication_controller("default").items:
         api_instance.delete_namespaced_replication_controller(
-            body=kubernetes.client.V1DeleteOptions(),
+            body=client.V1DeleteOptions(),
             name=rc.metadata.name,
             namespace="default",
         )
     for pod in api_instance.list_namespaced_pod("default").items:
         api_instance.delete_namespaced_pod(
-            body=kubernetes.client.V1DeleteOptions(),
+            body=client.V1DeleteOptions(),
             name=pod.metadata.name,
             namespace="default",
         )
@@ -115,7 +115,7 @@ def restart_pods(game_creator_yaml, ingress_yaml):
         extensions_api_instance.delete_namespaced_ingress(
             name=ingress.metadata.name,
             namespace="default",
-            body=kubernetes.client.V1DeleteOptions(),
+            body=client.V1DeleteOptions(),
         )
 
     extensions_api_instance.create_namespaced_ingress("default", ingress_yaml)
@@ -131,19 +131,22 @@ def main(module_name):
     :param aimmo_version: The tagged version of AI:MMO. We will use this to
                           build the correct docker images.
     """
+    config.load_kube_config()
 
     global api_instance
     global extensions_api_instance
-    api_instance = kubernetes.client.CoreV1Api()
-    extensions_api_instance = kubernetes.client.ExtensionsV1beta1Api()
-    aimmo_version = get_aimmo_version()
+    api_instance = client.CoreV1Api()
+    extensions_api_instance = client.ExtensionsV1beta1Api()
 
-    ingress = create_ingress_yaml(module_name=module_name)
-    game_creator_rc = create_creator_yaml(
-        module_name=module_name, aimmo_version=aimmo_version
-    )
+    print(api_instance.list_pod_for_all_namespaces())
+    # aimmo_version = get_aimmo_version()
 
-    restart_pods(game_creator_rc, ingress)
+    # ingress = create_ingress_yaml(module_name=module_name)
+    # game_creator_rc = create_creator_yaml(
+    #     module_name=module_name, aimmo_version=aimmo_version
+    # )
+
+    # restart_pods(game_creator_rc, ingress)
 
 
 if __name__ == "__main__":
