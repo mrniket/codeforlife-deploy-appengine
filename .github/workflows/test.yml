@@ -74,7 +74,7 @@ jobs:
       - run: kubectl config view
 
       - name: Put service account in file
-        run: echo $GCP_SA_KEY | base64 --decode > clusters_setup/gcp_sa_key.json
+        run: echo $GCP_SA_KEY | base64 --decode > gcp_sa_key.json
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
