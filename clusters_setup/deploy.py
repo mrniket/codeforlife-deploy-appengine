@@ -131,7 +131,7 @@ def main(module_name):
     :param aimmo_version: The tagged version of AI:MMO. We will use this to
                           build the correct docker images.
     """
-    config.load_kube_config("clusters_setup/gcp_sa_key.json")
+    config.load_kube_config("gcp_sa_key.json")
 
     global api_instance
     global extensions_api_instance
