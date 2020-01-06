@@ -84,7 +84,11 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_sa_key.json
 
       - name: 'Migrate database (if needed)'
-        run: python manage.py migrate --no-input
+        run: |
+          wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
+          chmod +x cloud_sql_proxy
+          ./cloud_sql_proxy -instances="decent-digit-629:europe-west1:db"=tcp:3306 &
+          python manage.py migrate --no-input
         env:
           DATABASE_NAME: 'cfl_${{ github.event.deployment.environment }}'
           CLOUD_SQL_HOST: ${{ secrets.CLOUD_SQL_HOST }}
