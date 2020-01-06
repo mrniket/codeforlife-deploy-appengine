@@ -85,6 +85,10 @@ jobs:
 
       - name: 'Migrate database (if needed)'
         run: python manage.py migrate --no-input
+        env:
+          DATABASE_NAME: 'cfl_${{ github.event.deployment.environment }}'
+          CLOUD_SQL_HOST: ${{ secrets.CLOUD_SQL_HOST }}
+          CLOUD_SQL_PASSWORD: ${{ secrets.CLOUD_SQL_PASSWORD }}
       
       - name: 'Deploy Django app on AppEngine'
         run: gcloud app --quiet deploy app.yaml --project ${APP_ID} --no-promote
