@@ -83,6 +83,18 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_sa_key.json
 
+      - name: 'Migrate database (if needed)'
+        run: python manage.py migrate --no-input
+      
+      - name: 'Deploy Django app on AppEngine'
+        run: gcloud app --quiet deploy app.yaml --project ${APP_ID} --no-promote
+
+      - name: 'Deploy cron.yaml'
+        run: gcloud app --quiet deploy cron.yaml --project ${APP_ID} --no-promote
+
+      - name: 'Test deployment'
+        run: ./test.sh ${{ github.event.deployment.environment }} default
+
       - name: 'Deployment success'
         if: success()
         uses: 'deliverybot/status@master'
