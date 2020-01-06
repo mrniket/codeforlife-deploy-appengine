@@ -60,10 +60,10 @@ jobs:
         run: python manage.py collectstatic --noinput
       
       
-      # - name: 'Restart MySQL'
-      #   run: |
-      #     sudo sed -i '/\[mysqld\]/assl = 1' /etc/mysql/mysql.conf.d/mysqld.cnf
-      #     sudo service mysql restart
+      - name: 'Stop MySQL'
+        run: |
+          sudo sed -i '/\[mysqld\]/assl = 1' /etc/mysql/mysql.conf.d/mysqld.cnf
+          sudo service mysql stop
           
       - name: 'gcloud: set project id'
         run: gcloud config set project ${APP_ID}
