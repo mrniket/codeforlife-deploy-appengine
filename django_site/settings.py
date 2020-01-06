@@ -158,7 +158,7 @@ else:
         "default": {
             "ENGINE": "django.db.backends.mysql",
             "HOST": "127.0.0.1",
-            "NAME": "os.getenv("DATABASE_NAME")",
+            "NAME": os.getenv("DATABASE_NAME"),
             "USER": "root",
         }
     }
