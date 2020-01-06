@@ -1,6 +1,6 @@
 name: Deploy to Dev
 
-on: [deployment]
+on: [push]
 
 jobs:
   deployment:
@@ -20,7 +20,7 @@ jobs:
       - name: 'Setup python'
         uses: actions/setup-python@v1
         with:
-          python-version: '2.7.x'
+          python-version: '3.7.x'
           architecture: 'x64'
     
       - name: 'Authenticate with Google Cloud'
@@ -39,31 +39,30 @@ jobs:
           echo "payload - ${{ toJson(github.event.deployment.payload) }}"
           ls
       
-      # - name: 'Setup MySQL'
-      #   run: |
-      #     sudo apt-get install libmysqlclient-dev
-      #     pip install mysql-python
+      - name: 'Setup MySQL'
+        run: |
+          pip install mysqlclient
       
       - name: 'Install kubernetes'
         run: pip install kubernetes
         
-      # - name: 'Install packages'
-      #   run: |
-      #     pip install -t lib codeforlife-portal
-      #     pip install -t lib --pre --upgrade --no-deps aimmo
-      #     pip install beautifulsoup4
-      #     pip install requests
-      #     pip install -t lib requests-toolbelt
-      #     python install_gaerpytz.py
+      - name: 'Install packages'
+        run: |
+          pip install -t lib codeforlife-portal
+          pip install -t lib --pre --upgrade --no-deps aimmo
+          pip install beautifulsoup4
+          pip install requests
+          pip install -t lib requests-toolbelt
+          python install_gaerpytz.py
       
-      # - name: 'Collect resources'
-      #   run: python manage.py collectstatic --noinput
+      - name: 'Collect resources'
+        run: python manage.py collectstatic --noinput
       
       
-      # - name: 'Restart MySQL'
-      #   run: |
-      #     sudo sed -i '/\[mysqld\]/assl = 1' /etc/mysql/mysql.conf.d/mysqld.cnf
-      #     sudo service mysql restart
+      - name: 'Restart MySQL'
+        run: |
+          sudo sed -i '/\[mysqld\]/assl = 1' /etc/mysql/mysql.conf.d/mysqld.cnf
+          sudo service mysql restart
           
       - name: 'gcloud: set project id'
         run: gcloud config set project ${APP_ID}
