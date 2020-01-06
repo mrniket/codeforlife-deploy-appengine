@@ -32,12 +32,12 @@ jobs:
       # - run: gcloud info
       
       # Actual deployment
-      # - name: 'Deploy ${{ github.event.deployment.environment }}'
-      #   run: |
-      #     echo "task - ${{ github.event.deployment.task }}"
-      #     echo "environment - ${{ github.event.deployment.environment }}"
-      #     echo "payload - ${{ toJson(github.event.deployment.payload) }}"
-      #     ls
+      - name: 'Test info ${{ github.event.deployment.environment }}'
+        run: |
+          echo "task - ${{ github.event.deployment.task }}"
+          echo "environment - ${{ github.event.deployment.environment }}"
+          echo "payload - ${{ toJson(github.event.deployment.payload) }}"
+          ls
       
       - name: 'Setup MySQL'
         run: |
@@ -97,6 +97,8 @@ jobs:
       
       - name: 'Deploy Django app on AppEngine - ${{ github.event.deployment.environment }}'
         run: gcloud app --quiet deploy app.yaml --project ${APP_ID} --no-promote
+        env:
+          APP_ID: decent-digit-629
 
       - name: 'Deploy cron.yaml'
         run: gcloud app --quiet deploy cron.yaml --project ${APP_ID} --no-promote
