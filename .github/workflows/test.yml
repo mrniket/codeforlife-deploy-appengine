@@ -44,8 +44,8 @@ jobs:
           sudo apt-get install libmysqlclient-dev
           pip install mysqlclient
       
-      - name: 'Install kubernetes'
-        run: pip install kubernetes
+      # - name: 'Install kubernetes'
+      #   run: pip install kubernetes
         
       - name: 'Install packages'
         run: |
@@ -56,8 +56,8 @@ jobs:
           pip install -t lib requests-toolbelt
           python install_gaerpytz.py
       
-      - name: 'Collect resources'
-        run: python manage.py collectstatic --noinput
+      # - name: 'Collect resources'
+      #   run: python manage.py collectstatic --noinput
       
       
       - name: 'Stop MySQL'
@@ -78,10 +78,10 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
-      - name: 'Deploy k8s to ${{ github.event.deployment.environment }}'
-        run: python clusters_setup/deploy.py ${{ github.event.deployment.environment }}
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_sa_key.json
+      # - name: 'Deploy k8s to ${{ github.event.deployment.environment }}'
+      #   run: python clusters_setup/deploy.py ${{ github.event.deployment.environment }}
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_sa_key.json
 
       - name: 'Migrate database (if needed)'
         run: |
@@ -95,14 +95,14 @@ jobs:
           CLOUD_SQL_HOST: ${{ secrets.CLOUD_SQL_HOST }}
           CLOUD_SQL_PASSWORD: ${{ secrets.CLOUD_SQL_PASSWORD }}
       
-      - name: 'Deploy Django app on AppEngine - ${{ github.event.deployment.environment }}'
-        run: gcloud app --quiet deploy app.yaml --project ${APP_ID} --no-promote
+      # - name: 'Deploy Django app on AppEngine - ${{ github.event.deployment.environment }}'
+      #   run: gcloud app --quiet deploy app.yaml --project ${APP_ID} --no-promote
 
-      - name: 'Deploy cron.yaml'
-        run: gcloud app --quiet deploy cron.yaml --project ${APP_ID} --no-promote
+      # - name: 'Deploy cron.yaml'
+      #   run: gcloud app --quiet deploy cron.yaml --project ${APP_ID} --no-promote
 
-      - name: 'Test deployment'
-        run: ./test.sh ${{ github.event.deployment.environment }} default
+      # - name: 'Test deployment'
+      #   run: ./test.sh ${{ github.event.deployment.environment }} default
 
       - name: 'Deployment success'
         if: success()
